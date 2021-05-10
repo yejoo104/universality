@@ -4,20 +4,29 @@
     <head>
         <title>Experiment</title>
         <script src="jspsych-6.3.1/jspsych.js"></script>
-        <script src="jspsych-6.3.1/plugins/jspsych-html-keyboard-response.js"></script>
         <link href="jspsych-6.3.1/css/jspsych.css" rel="stylesheet" type="text/css">
+        <script src="jspsych-6.3.1/plugins/jspsych-survey-text.js"></script>
     </head>
     <body></body>
     
     <script>
-        var hello_trial = {
-            type: 'html-keyboard-response',
-            stimulus: 'Hello'
+        var timeline = [];
+        
+        // subject id
+        var subj_id_req = {
+            type: 'survey-text',
+            questions: [{prompt: 'Please type your Prolific ID in the box and then click "Continue"', placeholder: 'Prolific ID', rows: 1, columns: 25, name: 'subject_id', required: true},],
+            data: {
+                data_type: 'info'
+            },
+            on_finish: function(data){
+            }
         }
+        timeline.push(subj_id_req);
     
-    jsPsych.init({
-        timeline: [hello_trial]
-    })
+        jsPsych.init({
+            timeline: timeline
+        })
     </script>
 </html>
 
