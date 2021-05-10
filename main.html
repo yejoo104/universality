@@ -6,6 +6,8 @@
         <script src="jspsych-6.3.1/jspsych.js"></script>
         <link href="jspsych-6.3.1/css/jspsych.css" rel="stylesheet" type="text/css">
         <script src="jspsych-6.3.1/plugins/jspsych-survey-text.js"></script>
+        <script src="jspsych-6.3.1/plugins/jspsych-preload.js"></script>
+        <script src="input_files/filenames.js"></script>
     </head>
     <body></body>
     
@@ -47,6 +49,13 @@
             }
         }
         timeline.push(subj_id_req);
+        
+        // preload audio
+        var preload_audio = {
+            type: 'preload',
+            audio: filenames
+        }
+        timeline.push(preload_audio)
     
         jsPsych.init({
             timeline: timeline
