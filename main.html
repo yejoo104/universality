@@ -10,7 +10,26 @@
     <body></body>
     
     <script>
+        function save_to_id_folder(name, data){
+          var form_data = new FormData();
+          form_data.append("data",data);
+          form_data.append("filename",name);
+          var xhr = new XMLHttpRequest();
+          xhr.open('POST', 'save_to_id_folder.php', true);
+          xhr.onreadystatechange = function (oEvent) {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                  console.log(xhr.responseText)
+                } else {
+                  console.log("Error", xhr.statusText);
+                }
+            }
+          };
+          xhr.send(form_data);
+        }
+        
         var timeline = [];
+        var new_subj_num = 1;
         
         // subject id
         var subj_id_req = {
@@ -20,6 +39,11 @@
                 data_type: 'info'
             },
             on_finish: function(data){
+                d = new Date();
+                data.timestamp = d.toString();
+                user_input_id = jsPsych.data.get().values()[0].response
+                // create csv in id_folder
+                save_to_id_folder('subj_' + String(user_input_id.subject_id) + '_trialList_'+new_subj_num, "");
             }
         }
         timeline.push(subj_id_req);
