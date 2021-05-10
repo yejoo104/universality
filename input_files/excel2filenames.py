@@ -6,7 +6,7 @@ def excel2filenames():
     filenames = []
     
     for index, row in df.iterrows():
-        filename = "soundFiles/" + row['Language'] + "/lowPassed/" + row['corpus_ID']
+        filename = "soundFiles/" + row['Language'] + "/lowPassed/" + row['corpus_ID'][:-3] + 'wav'
         filenames.append(filename)
     
     return filenames
