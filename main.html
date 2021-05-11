@@ -8,6 +8,7 @@
         <script src="jspsych-6.3.1/plugins/jspsych-survey-text.js"></script>
         <script src="jspsych-6.3.1/plugins/jspsych-preload.js"></script>
         <script src="input_files/filenames.js"></script>
+        <script src="jspsych-6.3.1/plugins/jspsych-html-keyboard-response.js"></script>
     </head>
     <body></body>
     
@@ -57,6 +58,42 @@
         }
         timeline.push(preload_audio)
     
+        // prompt participant to use headphones
+        var headphones = {
+            type: 'survey-text',
+            questions: [{prompt: 'Please confirm you will be using headphones by typing "I will use headphones" in the box.', required: true}],
+            data: {
+                data_type: 'info'
+            },
+            button_label: "Continue",
+            on_finish: function(data) {
+                d = new Date();
+                data.timestamp = d.toString();
+            }
+        }
+        timeline.push(headphones)
+        
+        // more instructions
+        var instructions = {
+            type: "html-keyboard-response",
+            stimulus: `
+                <p> Before we start, please make sure that:</p>
+                <p> 1) you are sitting at a quiet place </p>
+                <p> 2) devices or apps that might be making noise are turned off </p>
+                <p> 3) all other web pages except this one are closed </p>
+                <p> All the recordings in the experiment will only be played once, so please pay attention. </p>
+                <br></br>
+                <p> Press any key to continue </p>`,
+            data: {
+                data_type: 'info'
+            },
+            on_finish: function(data) {
+                d = new Date();
+                data.timestamp = d.toString();
+            }
+        }
+        timeline.push(instructions);
+        
         jsPsych.init({
             timeline: timeline
         })
