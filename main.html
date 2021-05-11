@@ -9,6 +9,7 @@
         <script src="jspsych-6.3.1/plugins/jspsych-preload.js"></script>
         <script src="input_files/filenames.js"></script>
         <script src="jspsych-6.3.1/plugins/jspsych-html-keyboard-response.js"></script>
+        <script src="jspsych-6.3.1/plugins/jspsych-audio-keyboard-response.js"></script>
     </head>
     <body></body>
     
@@ -93,6 +94,34 @@
             }
         }
         timeline.push(instructions);
+        
+        // volume test
+        var volume_instructions = {
+            type: "html-keyboard-response",
+            stimulus:`
+                <p>You will hear a recording in the next part.</p>
+                <p>Adjust your headphone volume to what is best for you when you listen to the recording.</p>
+                <p>Press any key to continue. </p>
+                `,
+            data: {
+                data_type: 'info'
+            },
+            on_finish: function(data){
+                d = new Date();
+                data.timestamp = d.toString();
+            }
+        };
+        timeline.push(volume_instructions);
+        
+        var volume_adjust = {
+            type: 'audio-keyboard-response',
+            prompt: '<p> Adjust your headphoen volume using this recording. </p> <p> Press any key to continue when you are finished </p>',
+            stimulus: "soundFiles/_volumetest.ogg",
+            data: {
+                data_type: 'info'
+            }
+        };
+        timeline.push(volume_adjust);
         
         jsPsych.init({
             timeline: timeline
