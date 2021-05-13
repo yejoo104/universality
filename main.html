@@ -115,13 +115,34 @@
         
         var volume_adjust = {
             type: 'audio-keyboard-response',
-            prompt: '<p> Adjust your headphoen volume using this recording. </p> <p> Press any key to continue when you are finished </p>',
+            prompt: '<p> Adjust your headphone volume using this recording. </p> <p> Press any key to continue when you are finished </p>',
             stimulus: "soundFiles/_volumetest.ogg",
             data: {
                 data_type: 'info'
             }
         };
         timeline.push(volume_adjust);
+        
+        var trial_instructions = {
+            type: "html-keyboard-response",
+            stimulus: `
+                <p> In this experiment, you will hear multiple content-impaired sentences in various languages.</p>
+                <p> After hearing two recordings, you will be asked to rate how similar the languages in the two recordings sound to you on a scale of 1 to 7. </p>
+                <p> If the two recordings sound like they are the same language, you should click 7. If the two recordings sound like they are entirely different languages, you should click 1. </p>
+                <p> Each recording will only be played once, so please pay attention. </p>
+                <p> At the end of every 10 trials, there is a chance to take a break if needed. </p>
+                <br></br>
+                <p> Press any key to continue.
+                `,
+            data: {
+                data_type: 'info'
+            },
+            on_finish: function(data) {
+                d = new Date();
+                data.timestamp = d.toString();
+            }
+        }
+        timeline.push(trial_instructions);
         
         jsPsych.init({
             timeline: timeline
