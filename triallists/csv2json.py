@@ -1,10 +1,8 @@
 import csv
 import json
 
-def csv2json():
+def csv2json(csvFile, jsonFile):
     data = []
-    
-    csvFile = r"trialList_subject1.csv"
     
     with open(csvFile, encoding = 'utf-8') as reader:
         csvReader = csv.DictReader(reader)
@@ -12,9 +10,13 @@ def csv2json():
         for row in csvReader:
             data.append([item[1] for item in list(row.items())[1:]])
     
-    jsonFile = r"trialList_subject1.json"
     with open(jsonFile, 'w', encoding = 'utf-8') as writer:
         writer.write(json.dumps(data))
 
 if __name__ == "__main__":
-    csv2json()
+    triallist_num = 100
+    
+    for i in range(1, triallist_num + 1):
+        csvFile = "trialList_subject" + str(i) + ".csv"
+        jsonFile = "trialList_subject" + str(i) + ".json"
+        csv2json(csvFile, jsonFile)
