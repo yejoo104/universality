@@ -10,6 +10,7 @@
         <script src="input_files/filenames.js"></script>
         <script src="jspsych-6.3.1/plugins/jspsych-html-keyboard-response.js"></script>
         <script src="jspsych-6.3.1/plugins/jspsych-audio-keyboard-response.js"></script>
+        <script src="jquery-3.5.1.min.js"></script>
     </head>
     <body></body>
     
@@ -56,13 +57,19 @@
         async function select_trialList(num){
             var list_num = parseInt(num) + 1;
             new_subj_num = list_num;
-            var trial_list_file = 'triallists/trialList_subject' + list_num + '.json';
+            var trial_list_file = 'triallists/trialList_subject' + list_num + '.js';
             
-            // get json
+            // Load list
+            var fileref = document.createElement('script');
+            fileref.setAttribute("type", "text/javascript");
+            fileref.setAttribute("src", trial_list_file);
+            
+            $("head").append(fileref);
         }
-    
-
+        
+        // Check how many participants we went through
         check_folderID();
+        console.log(triallist[0]);
         
         var timeline = [];
         
