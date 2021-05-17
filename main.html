@@ -14,6 +14,9 @@
     <body></body>
     
     <script>
+        var old_subj_num = null;
+        var new_subj_num = null;
+        
         function save_to_id_folder(name, data){
           var form_data = new FormData();
           form_data.append("data",data);
@@ -31,9 +34,37 @@
           };
           xhr.send(form_data);
         }
+    
+        function check_folderID(){
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'check_folderID.php', false);
+            xhr.onreadystatechange = function(Event){
+                if(xhr.readyState === 4){
+                    if (xhr.status === 200){
+                        var num = xhr.responseText;
+                        old_subj_num = num;
+                        select_trialList(num);
+                    }
+                    else{
+                        console.log("Error", xhr.statusText);
+                    }
+                }
+            }
+            xhr.send(null);
+        }
+    
+        async function select_trialList(num){
+            var list_num = parseInt(num) + 1;
+            new_subj_num = list_num;
+            var trial_list_file = 'triallists/trialList_subject' + list_num + '.json';
+            
+            // get json
+        }
+    
+
+        check_folderID();
         
         var timeline = [];
-        var new_subj_num = 1;
         
         // subject id
         var subj_id_req = {
