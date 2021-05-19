@@ -70,7 +70,6 @@
         
         // Check how many participants we went through and link triallist js file based on number of participant
         check_folderID();
-        console.log(stims["Du"]);
         
         var timeline = [];
         
@@ -184,6 +183,27 @@
         }
         timeline.push(trial_instructions);
         
+        var num_trials = 168;
+        for (i = 0; i < num_trials; i++){
+            var stim1 = stims[triallist[i][0]][parseInt(triallist[i][1]) - 1];
+            var stim2 = stims[triallist[i][2]][parseInt(triallist[i][3]) - 1];
+            
+            var audiostim1 = {
+                type: 'audio-keyboard-response',
+                prompt: "<p> This is the first recording. </p>",
+                stimulus: stim1,
+                choices: jsPsych.NO_KEYS,
+                trial_ends_after_audio: true,
+                data: {
+                    data_type: 'stimulus',
+                },
+                on_finish: function(data){
+                    d = new Date();
+                    data.timestamp = d.toString();
+                }
+            }
+            timeline.push(audiostim1);
+        }
         jsPsych.init({
             timeline: timeline
         })
