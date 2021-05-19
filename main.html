@@ -184,8 +184,30 @@
         }
         timeline.push(trial_instructions);
         
+        // define break page (before starting trial)
+        var break_page = {
+            type: "html-keyboard-response",
+            stimulus: `<p>Take a break if needed.</p>
+            <p>Press any key to continue when you're ready. The experiment resumes in 2 seconds after you press the key.</p>
+            `,
+            data: {
+                data_type: 'info',
+                ans: 'NA'
+            },
+            post_trial_gap: 2000,
+            on_finish: function(data){
+                d = new Date();
+                data.timestamp = d.toString();
+            }
+        }
+        
         var num_trials = 168;
         for (i = 0; i < num_trials; i++){
+            // break page every 15 trials
+            if (i % 15 == 14){
+                timeline.push(break_page);
+            }
+            
             var stim1 = stims[triallist[i][0]][parseInt(triallist[i][1]) - 1];
             var stim2 = stims[triallist[i][2]][parseInt(triallist[i][3]) - 1];
             
