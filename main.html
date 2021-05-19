@@ -12,6 +12,7 @@
         <script src="jspsych-6.3.1/plugins/jspsych-audio-keyboard-response.js"></script>
         <script src="jquery-3.5.1.min.js"></script>
         <script src="input_files/stims.js"></script>
+        <script src="jspsych-6.3.1/plugins/jspsych-html-button-response.js"></script>
     </head>
     <body></body>
     
@@ -188,6 +189,7 @@
             var stim1 = stims[triallist[i][0]][parseInt(triallist[i][1]) - 1];
             var stim2 = stims[triallist[i][2]][parseInt(triallist[i][3]) - 1];
             
+            // first recording
             var audiostim1 = {
                 type: 'audio-keyboard-response',
                 prompt: "<p> This is the first recording. </p>",
@@ -203,7 +205,60 @@
                 }
             }
             timeline.push(audiostim1);
+            
+            // pause 2 seconds before second recording
+            var pause = {
+                type: "html-keyboard-response",
+                stimulus: "<p> Pause Before Next Recording </p>",
+                data: {
+                    data_type: 'info',
+                    ans: 'NA'
+                },
+                trial_duration: 2000,
+                on_finish: function(data){
+                    d = new Date();
+                    data.timestamp = d.toString();
+                }
+            }
+            timeline.push(pause);
+            
+            // second recording
+            var audiostim2 = {
+                type: 'audio-keyboard-response',
+                prompt: "<p> This is the second recording. </p>",
+                stimulus: stim2,
+                choices: jsPsych.NO_KEYS,
+                trial_ends_after_audio: true,
+                data: {
+                    data_type: 'stimulus',
+                },
+                on_finish: function(data){
+                    d = new Date();
+                    data.timestamp = d.toString();
+                }
+            }
+            timeline.push(audiostim2);
+            
+            // participant gives rating
+            var rating = {
+                type: "html-button-response",
+                stimulus: "<p>How similar do the two recordings sound to you? </p> <p> 1 for <strong> entirely different languages </strong>, 7 for <strong> entirely same language </strong></p>",
+                prompt: "click the buttom corresponding to your judgment",
+                choices: ['1', '2', '3', '4', '5', '6', '7'],
+                data: {
+                    data_type: 'trial',
+                    task: 'response',
+                    stim1: stim1,
+                    stim2: stim2
+                },
+                on_finish: function(data) {
+                    d = new Date();
+                    data.timestamp = d.toString();
+                }
+            }
+            timeline.push(rating);
         }
+    
         jsPsych.init({
             timeline: timeline
         })
