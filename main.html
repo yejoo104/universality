@@ -17,9 +17,6 @@
     <body></body>
     
     <script>
-        var old_subj_num = null;
-        var new_subj_num = null;
-        
         function save_to_id_folder(name, data){
           var form_data = new FormData();
           form_data.append("data",data);
@@ -57,8 +54,8 @@
         }
     
         async function select_trialList(num){
-            var list_num = parseInt(num) + 1;
-            new_subj_num = list_num;
+            new_subj_num = parseInt(num) + 1;
+            var list_num = num % 100 + 1;
             var trial_list_file = 'triallists/trialList_subject' + list_num + '.js';
             
             // Load list
@@ -68,6 +65,21 @@
             
             $("head").append(fileref);
         }
+    
+        function saveData(name, data){
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'write_data.php');
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(JSON.stringify({filename: name, filedata: data}));
+        }
+        
+        // Initialize
+        var old_subj_num = null;
+        var new_subj_num = null;
+        
+        // Timestamp
+        const event = new Date();
+        const d_str = event.toLocaleTimeString(navigator.language, {month: '2-digit', day: '2-digit', hour: '2-digit', minute:'2-digit'}).replace(/ /g,"_").replace("/","_").replace(",","_").replace(":","_");
         
         // Check how many participants we went through and link triallist js file based on number of participant
         check_folderID();
@@ -201,7 +213,7 @@
             }
         }
         
-        var num_trials = 168;
+        var num_trials = 20;
         for (i = 0; i < num_trials; i++){
             // break page every 15 trials
             if (i % 15 == 14){
@@ -264,7 +276,7 @@
             // participant gives rating
             var rating = {
                 type: "html-button-response",
-                stimulus: "<p>How similar do the two recordings sound to you? </p> <p> 1 for <strong> entirely different languages </strong>, 7 for <strong> entirely same language </strong></p>",
+                stimulus: "<p>How similar do the two languages sound to you? </p> <p> 1 for <strong> entirely different languages </strong>, 7 for <strong> entirely same language </strong></p>",
                 prompt: "click the buttom corresponding to your judgment",
                 choices: ['1', '2', '3', '4', '5', '6', '7'],
                 data: {
@@ -282,7 +294,11 @@
         }
     
         jsPsych.init({
-            timeline: timeline
+            timeline: timeline,
+            show_progress_bar: true,
+            on_finish: function(){
+                saveData('subj_' + String(user_input_id.subject_id) + '_trialList_'+ new_subj_num + "_data", jsPsych.data.get().csv());
+            }
         })
     </script>
 </html>
