@@ -178,9 +178,11 @@
         var trial_instructions = {
             type: "html-keyboard-response",
             stimulus: `
-                <p> In this experiment, you will hear multiple content-impaired sentences in various languages.</p>
+                <p> In this experiment, you will hear multiple content-impaired recordings in various languages.</p>
                 <p> After hearing two recordings, you will be asked to rate how similar the languages in the two recordings sound to you on a scale of 1 to 7. </p>
-                <p> If the two recordings sound like they are the same language, you should click 7. If the two recordings sound like they are entirely different languages, you should click 1. </p>
+                <p> If the two recordings sound like they are the same language, you should click 7. </p>
+                <p> If the two recordings sound like they are entirely different languages, you should click 1. </p>
+                <p> Please note that the 2 recordings will always be of 2 different speakers, whether they are speaking in the same language or a different language. </p>
                 <p> Each recording will only be played once, so please pay attention. </p>
                 <p> At the end of every 10 trials, there is a chance to take a break if needed. </p>
                 <br></br>
@@ -215,8 +217,8 @@
         
         var num_trials = 3;
         for (i = 0; i < num_trials; i++){
-            // break page every 15 trials
-            if (i % 15 == 14){
+            // break page every 10 trials
+            if (i % 10 == 9){
                 timeline.push(break_page);
             }
             
@@ -240,15 +242,15 @@
             }
             timeline.push(audiostim1);
             
-            // pause 2 seconds before second recording
+            // pause 1 second before second recording
             var pause = {
                 type: "html-keyboard-response",
-                stimulus: "<p> Pause Before Next Recording </p>",
+                stimulus: "_",
                 data: {
                     data_type: 'info',
                     ans: 'NA'
                 },
-                trial_duration: 2000,
+                trial_duration: 1000,
                 on_finish: function(data){
                     d = new Date();
                     data.timestamp = d.toString();
