@@ -11,6 +11,7 @@ def processdata(datafile):
         
     df = df.astype({'Excerpt1': int, 'Excerpt2': int})
     df.index = np.arange(1, len(df) + 1)
+    df.index.name = "trial number"
     df.to_csv(datafile[:-4] + "_cleaned.csv")
 
 if __name__ == "__main__":

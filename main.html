@@ -106,7 +106,8 @@
         // preload audio
         var preload_audio = {
             type: 'preload',
-            audio: filenames
+            audio: filenames,
+            message: "Please wait while the audio files in the experiment are loading"
         }
         timeline.push(preload_audio)
     
@@ -198,6 +199,113 @@
         }
         timeline.push(trial_instructions);
         
+        // Practice Trial
+        var instructions_practice_trial = {
+            type: "html-keyboard-response",
+            stimulus: `
+                <p>Pratice trial  1/1:</p>
+                <p>The data from this trial will not be recorded. It's just for you to be familiar with the settings.</p>
+                <p>Press any key to continue</p>
+                `,
+            data: {
+                data_type: 'info'
+            },
+            on_finish: function(data) {
+                d = new Date();
+                data.timestamp = d.toString();
+            }
+        }
+        timeline.push(instructions_practice_trial);
+        
+        // Practice Audio 1
+        var practice_audio_1 = {
+            type: 'audio-keyboard-response',
+            prompt: "<p> This is the first recording. </p>",
+            stimulus: "soundFiles/German/lowPassed/common_voice_de_17828493.wav",
+            choices: jsPsych.NO_KEYS,
+            trial_ends_after_audio: true,
+            data: {
+                data_type: 'stimulus',
+            },
+            on_finish: function(data){
+                d = new Date();
+                data.timestamp = d.toString();
+            }
+        }
+        timeline.push(practice_audio_1);
+        
+        // Practice Pause
+        var pause_practice = {
+            type: "html-keyboard-response",
+            stimulus: "_",
+            data: {
+                data_type: 'info',
+                ans: 'NA'
+            },
+            trial_duration: 1000,
+            on_finish: function(data){
+                d = new Date();
+                data.timestamp = d.toString();
+            }
+        }
+        timeline.push(pause_practice);
+        
+        // Practice Audio 2
+        var practice_audio_2 = {
+            type: 'audio-keyboard-response',
+            prompt: "<p> This is the second recording. </p>",
+            stimulus: "soundFiles/German/lowPassed/common_voice_de_17938156.wav",
+            choices: jsPsych.NO_KEYS,
+            trial_ends_after_audio: true,
+            data: {
+                data_type: 'stimulus',
+            },
+            on_finish: function(data){
+                d = new Date();
+                data.timestamp = d.toString();
+            }
+        }
+        timeline.push(practice_audio_2);
+        
+        // Practice Rating
+        var practice_rating = {
+            type: "html-button-response",
+            stimulus: "<p>How similar do the two languages sound to you? </p> <p> 1 for <strong> entirely different languages </strong>, 7 for <strong> entirely same language </strong></p>",
+            prompt: "click the buttom corresponding to your judgment",
+            choices: ['1', '2', '3', '4', '5', '6', '7'],
+            save_trial_parameters:{
+                choices: true,
+                stimulus: false
+            },
+            data: {
+                data_type: 'practice',
+                task: 'practice'
+            },
+            on_finish: function(data) {
+                d = new Date();
+                data.timestamp = d.toString();
+            }
+        }
+        timeline.push(practice_rating);
+        
+        // Instructions Before Actual Experiment
+        var instructions_actual_trial = {
+            type: "html-keyboard-response",
+            stimulus: `
+                <p>Press any key to begin the actual experiment.</p>
+                <p>The actual experiment will begin 2s after you press the button.</p>
+                `,
+            data: {
+                data_type: 'info'
+            },
+            post_trial_gap: 2000,
+            on_finish: function (data) {
+                d = new Date();
+                data.timestamp = d.toString();
+            }
+        }
+        timeline.push(instructions_actual_trial);
+        
         // define break page (before starting trial)
         var break_page = {
             type: "html-keyboard-response",
@@ -209,6 +317,21 @@
                 ans: 'NA'
             },
             post_trial_gap: 2000,
+            on_finish: function(data){
+                d = new Date();
+                data.timestamp = d.toString();
+            }
+        }
+        
+        // define pause (before starting trial)
+        var pause = {
+            type: "html-keyboard-response",
+            stimulus: "_",
+            data: {
+                data_type: 'info',
+                ans: 'NA'
+            },
+            trial_duration: 1000,
             on_finish: function(data){
                 d = new Date();
                 data.timestamp = d.toString();
@@ -243,19 +366,6 @@
             timeline.push(audiostim1);
             
             // pause 1 second before second recording
-            var pause = {
-                type: "html-keyboard-response",
-                stimulus: "_",
-                data: {
-                    data_type: 'info',
-                    ans: 'NA'
-                },
-                trial_duration: 1000,
-                on_finish: function(data){
-                    d = new Date();
-                    data.timestamp = d.toString();
-                }
-            }
             timeline.push(pause);
             
             // second recording
