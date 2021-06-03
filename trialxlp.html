@@ -1,0 +1,426 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Experiment</title>
+        <script src="jspsych-6.3.1/jspsych.js"></script>
+        <link href="jspsych-6.3.1/css/jspsych.css" rel="stylesheet" type="text/css">
+        <script src="jspsych-6.3.1/plugins/jspsych-survey-text.js"></script>
+        <script src="jspsych-6.3.1/plugins/jspsych-preload.js"></script>
+        <script src="input_files/filenames_normalized.js"></script>
+        <script src="jspsych-6.3.1/plugins/jspsych-html-keyboard-response.js"></script>
+        <script src="jspsych-6.3.1/plugins/jspsych-audio-keyboard-response.js"></script>
+        <script src="jquery-3.5.1.min.js"></script>
+        <script src="input_files/stims_normalized.js"></script>
+        <script src="jspsych-6.3.1/plugins/jspsych-html-button-response.js"></script>
+    </head>
+    <body></body>
+    
+    <script>
+        function save_to_id_folder(name, data){
+          var form_data = new FormData();
+          form_data.append("data",data);
+          form_data.append("filename",name);
+          var xhr = new XMLHttpRequest();
+          xhr.open('POST', 'save_to_id_folder_normalized.php', true);
+          xhr.onreadystatechange = function (oEvent) {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                  console.log(xhr.responseText)
+                } else {
+                  console.log("Error", xhr.statusText);
+                }
+            }
+          };
+          xhr.send(form_data);
+        }
+    
+        function check_folderID(){
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'check_folderID_normalized.php', false);
+            xhr.onreadystatechange = function(Event){
+                if(xhr.readyState === 4){
+                    if (xhr.status === 200){
+                        var num = xhr.responseText;
+                        old_subj_num = num;
+                        select_trialList(num);
+                    }
+                    else{
+                        console.log("Error", xhr.statusText);
+                    }
+                }
+            }
+            xhr.send(null);
+        }
+    
+        async function select_trialList(num){
+            new_subj_num = parseInt(num) + 1;
+            var list_num = num % 100 + 1;
+            var trial_list_file = 'triallists/trialList_subject' + list_num + '.js';
+            
+            // Load list
+            var fileref = document.createElement('script');
+            fileref.setAttribute("type", "text/javascript");
+            fileref.setAttribute("src", trial_list_file);
+            
+            $("head").append(fileref);
+        }
+    
+        function saveData(name, data){
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'write_data.php');
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(JSON.stringify({filename: name, filedata: data}));
+        }
+        
+        // Initialize
+        var old_subj_num = null;
+        var new_subj_num = null;
+        
+        // Timestamp
+        const event = new Date();
+        const d_str = event.toLocaleTimeString(navigator.language, {month: '2-digit', day: '2-digit', hour: '2-digit', minute:'2-digit'}).replace(/ /g,"_").replace("/","_").replace(",","_").replace(":","_");
+        
+        // Check how many participants we went through and link triallist js file based on number of participant
+        check_folderID();
+        
+        var timeline = [];
+        
+        // subject id
+        var subj_id_req = {
+            type: 'survey-text',
+            questions: [{prompt: 'Please type your Prolific ID in the box and then click "Continue"', placeholder: 'Prolific ID', rows: 1, columns: 25, name: 'subject_id', required: true},],
+            data: {
+                data_type: 'info'
+            },
+            on_finish: function(data){
+                d = new Date();
+                data.timestamp = d.toString();
+                user_input_id = jsPsych.data.get().values()[0].response
+                // create csv in id_folder
+                save_to_id_folder('subj_' + String(user_input_id.subject_id) + '_trialList_'+new_subj_num, "");
+            }
+        }
+        timeline.push(subj_id_req);
+        
+        // preload audio
+        var preload_audio = {
+            type: 'preload',
+            audio: filenames,
+            message: "Please wait while the audio files in the experiment are loading"
+        }
+        timeline.push(preload_audio)
+    
+        // prompt participant to use headphones
+        var headphones = {
+            type: 'survey-text',
+            questions: [{prompt: 'Please confirm you will be using headphones by typing "I will use headphones" in the box.', required: true}],
+            data: {
+                data_type: 'info'
+            },
+            button_label: "Continue",
+            on_finish: function(data) {
+                d = new Date();
+                data.timestamp = d.toString();
+            }
+        }
+        timeline.push(headphones)
+        
+        // more instructions
+        var instructions = {
+            type: "html-keyboard-response",
+            stimulus: `
+                <p> Before we start, please make sure that:</p>
+                <p> 1) you are sitting at a quiet place </p>
+                <p> 2) devices or apps that might be making noise are turned off </p>
+                <p> 3) all other web pages except this one are closed </p>
+                <p> All the recordings in the experiment will only be played once, so please pay attention. </p>
+                <br></br>
+                <p> Press any key to continue </p>`,
+            data: {
+                data_type: 'info'
+            },
+            on_finish: function(data) {
+                d = new Date();
+                data.timestamp = d.toString();
+            }
+        }
+        timeline.push(instructions);
+        
+        // volume test
+        var volume_instructions = {
+            type: "html-keyboard-response",
+            stimulus:`
+                <p>You will hear a recording in the next part.</p>
+                <p>Adjust your headphone volume to what is best for you when you listen to the recording.</p>
+                <p>Press any key to continue. </p>
+                `,
+            data: {
+                data_type: 'info'
+            },
+            on_finish: function(data){
+                d = new Date();
+                data.timestamp = d.toString();
+            }
+        };
+        timeline.push(volume_instructions);
+        
+        var volume_adjust = {
+            type: 'audio-keyboard-response',
+            prompt: '<p> Adjust your headphone volume using this recording. </p> <p> Press any key to continue when you are finished </p>',
+            stimulus: "soundFiles/Italian/normalized/common_voice_it_17437588.wav",
+            data: {
+                data_type: 'info'
+            }
+        };
+        timeline.push(volume_adjust);
+        
+        // more trial instructions
+        var trial_instructions = {
+            type: "html-keyboard-response",
+            stimulus: `
+                <p> In this experiment, you will hear multiple content-impaired recordings in various languages.</p>
+                <p> After hearing two recordings, you will be asked to rate how similar the languages in the two recordings sound to you on a scale of 1 to 7. </p>
+                <p> If the two recordings sound like they are the same language, you should click 7. </p>
+                <p> If the two recordings sound like they are entirely different languages, you should click 1. </p>
+                <p> Please note that the 2 recordings will always be of 2 different speakers, whether they are speaking in the same language or a different language. </p>
+                <p> Each recording will only be played once, so please pay attention. </p>
+                <p> At the end of every 10 trials, there is a chance to take a break if needed. </p>
+                <br></br>
+                <p> Press any key to continue.
+                `,
+            data: {
+                data_type: 'info'
+            },
+            on_finish: function(data) {
+                d = new Date();
+                data.timestamp = d.toString();
+            }
+        }
+        timeline.push(trial_instructions);
+        
+        // Practice Trial
+        var instructions_practice_trial = {
+            type: "html-keyboard-response",
+            stimulus: `
+                <p>Pratice trial  1/1:</p>
+                <p>The data from this trial will not be recorded. It's just for you to be familiar with the settings.</p>
+                <p>Press any key to continue</p>
+                `,
+            data: {
+                data_type: 'info'
+            },
+            on_finish: function(data) {
+                d = new Date();
+                data.timestamp = d.toString();
+            }
+        }
+        timeline.push(instructions_practice_trial);
+        
+        // Practice Audio 1
+        var practice_audio_1 = {
+            type: 'audio-keyboard-response',
+            prompt: "<p> This is the first recording. </p>",
+            stimulus: "soundFiles/German/normalized/common_voice_de_17828493.wav",
+            choices: jsPsych.NO_KEYS,
+            trial_ends_after_audio: true,
+            data: {
+                data_type: 'stimulus',
+            },
+            on_finish: function(data){
+                d = new Date();
+                data.timestamp = d.toString();
+            }
+        }
+        timeline.push(practice_audio_1);
+        
+        // Practice Pause
+        var pause_practice = {
+            type: "html-keyboard-response",
+            stimulus: "_",
+            data: {
+                data_type: 'info',
+                ans: 'NA'
+            },
+            trial_duration: 1000,
+            on_finish: function(data){
+                d = new Date();
+                data.timestamp = d.toString();
+            }
+        }
+        timeline.push(pause_practice);
+        
+        // Practice Audio 2
+        var practice_audio_2 = {
+            type: 'audio-keyboard-response',
+            prompt: "<p> This is the second recording. </p>",
+            stimulus: "soundFiles/German/normalized/common_voice_de_17938156.wav",
+            choices: jsPsych.NO_KEYS,
+            trial_ends_after_audio: true,
+            data: {
+                data_type: 'stimulus',
+            },
+            on_finish: function(data){
+                d = new Date();
+                data.timestamp = d.toString();
+            }
+        }
+        timeline.push(practice_audio_2);
+        
+        // Practice Rating
+        var practice_rating = {
+            type: "html-button-response",
+            stimulus: "<p>How similar do the two languages sound to you? </p> <p> 1 for <strong> entirely different languages </strong>, 7 for <strong> entirely same language </strong></p>",
+            prompt: "click the buttom corresponding to your judgment",
+            choices: ['1', '2', '3', '4', '5', '6', '7'],
+            save_trial_parameters:{
+                choices: true,
+                stimulus: false
+            },
+            data: {
+                data_type: 'practice',
+                task: 'practice'
+            },
+            on_finish: function(data) {
+                d = new Date();
+                data.timestamp = d.toString();
+            }
+        }
+        timeline.push(practice_rating);
+        
+        // Instructions Before Actual Experiment
+        var instructions_actual_trial = {
+            type: "html-keyboard-response",
+            stimulus: `
+                <p>Press any key to begin the actual experiment.</p>
+                <p>The actual experiment will begin 2s after you press the button.</p>
+                `,
+            data: {
+                data_type: 'info'
+            },
+            post_trial_gap: 2000,
+            on_finish: function (data) {
+                d = new Date();
+                data.timestamp = d.toString();
+            }
+        }
+        timeline.push(instructions_actual_trial);
+        
+        // define break page (before starting trial)
+        var break_page = {
+            type: "html-keyboard-response",
+            stimulus: `<p>Take a break if needed.</p>
+            <p>Press any key to continue when you're ready. The experiment resumes in 2 seconds after you press the key.</p>
+            `,
+            data: {
+                data_type: 'info',
+                ans: 'NA'
+            },
+            post_trial_gap: 2000,
+            on_finish: function(data){
+                d = new Date();
+                data.timestamp = d.toString();
+            }
+        }
+        
+        // define pause (before starting trial)
+        var pause = {
+            type: "html-keyboard-response",
+            stimulus: "_",
+            data: {
+                data_type: 'info',
+                ans: 'NA'
+            },
+            trial_duration: 1000,
+            on_finish: function(data){
+                d = new Date();
+                data.timestamp = d.toString();
+            }
+        }
+        
+        var num_trials = 3;
+        for (i = 0; i < num_trials; i++){
+            // break page every 10 trials
+            if (i % 10 == 9){
+                timeline.push(break_page);
+            }
+            
+            var stim1 = stims[triallist[i][0]][parseInt(triallist[i][1]) - 1];
+            var stim2 = stims[triallist[i][2]][parseInt(triallist[i][3]) - 1];
+            
+            // first recording
+            var audiostim1 = {
+                type: 'audio-keyboard-response',
+                prompt: "<p> This is the first recording. </p>",
+                stimulus: stim1,
+                choices: jsPsych.NO_KEYS,
+                trial_ends_after_audio: true,
+                data: {
+                    data_type: 'stimulus',
+                },
+                on_finish: function(data){
+                    d = new Date();
+                    data.timestamp = d.toString();
+                }
+            }
+            timeline.push(audiostim1);
+            
+            // pause 1 second before second recording
+            timeline.push(pause);
+            
+            // second recording
+            var audiostim2 = {
+                type: 'audio-keyboard-response',
+                prompt: "<p> This is the second recording. </p>",
+                stimulus: stim2,
+                choices: jsPsych.NO_KEYS,
+                trial_ends_after_audio: true,
+                data: {
+                    data_type: 'stimulus',
+                },
+                on_finish: function(data){
+                    d = new Date();
+                    data.timestamp = d.toString();
+                }
+            }
+            timeline.push(audiostim2);
+            
+            // participant gives rating
+            var rating = {
+                type: "html-button-response",
+                stimulus: "<p>How similar do the two languages sound to you? </p> <p> 1 for <strong> entirely different languages </strong>, 7 for <strong> entirely same language </strong></p>",
+                prompt: "click the buttom corresponding to your judgment",
+                choices: ['1', '2', '3', '4', '5', '6', '7'],
+                save_trial_parameters:{
+                    choices: true,
+                    stimulus: false
+                },
+                data: {
+                    data_type: 'trial',
+                    task: 'response',
+                    L1: triallist[i][0],
+                    Excerpt1: triallist[i][1],
+                    L2: triallist[i][2],
+                    Excerpt2: triallist[i][3],
+                    Stimulus1: stim1,
+                    Stimulus2: stim2
+                },
+                on_finish: function(data) {
+                    d = new Date();
+                    data.timestamp = d.toString();
+                }
+            }
+            timeline.push(rating);
+        }
+    
+        jsPsych.init({
+            timeline: timeline,
+            show_progress_bar: true,
+            on_finish: function(){
+                saveData('normalized_subj_' + String(user_input_id.subject_id) + '_trialList_'+ new_subj_num + "_data", jsPsych.data.get().csv());
+            }
+        })
+    </script>
+</html>
+
+
