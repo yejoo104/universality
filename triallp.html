@@ -134,7 +134,6 @@
                 <p> 1) you are sitting at a quiet place </p>
                 <p> 2) devices or apps that might be making noise are turned off </p>
                 <p> 3) all other web pages except this one are closed </p>
-                <p> All the recordings in the experiment will only be played once, so please pay attention. </p>
                 <br></br>
                 <p> Press any key to continue </p>`,
             data: {
@@ -179,13 +178,14 @@
         var trial_instructions = {
             type: "html-keyboard-response",
             stimulus: `
-                <p> In this experiment, you will hear multiple content-impaired recordings in various languages.</p>
+                <p> In this experiment, you will hear multiple content-impaired recordings in various languages. </p>
+                <p> They will sound as if someone is speaking from the other room.</p>
                 <p> After hearing two recordings, you will be asked to rate how similar the languages in the two recordings sound to you on a scale of 1 to 7. </p>
                 <p> If the two recordings sound like they are the same language, you should click 7. </p>
                 <p> If the two recordings sound like they are entirely different languages, you should click 1. </p>
                 <p> Please note that the 2 recordings will always be of 2 different speakers, whether they are speaking in the same language or a different language. </p>
                 <p> Each recording will only be played once, so please pay attention. </p>
-                <p> At the end of every 10 trials, there is a chance to take a break if needed. </p>
+                <p> At the end of every 20 trials, there is a chance to take a break if needed. </p>
                 <br></br>
                 <p> Press any key to continue.
                 `,
@@ -204,7 +204,7 @@
             type: "html-keyboard-response",
             stimulus: `
                 <p>Pratice trial  1/1:</p>
-                <p>The data from this trial will not be recorded. It's just for you to be familiar with the settings.</p>
+                <p>The data from this trial will not be recorded. It's just for you to get familiar with the settings.</p>
                 <p>Press any key to continue</p>
                 `,
             data: {
@@ -237,7 +237,7 @@
         // Practice Pause
         var pause_practice = {
             type: "html-keyboard-response",
-            stimulus: "_",
+            stimulus: " ",
             data: {
                 data_type: 'info',
                 ans: 'NA'
@@ -326,7 +326,7 @@
         // define pause (before starting trial)
         var pause = {
             type: "html-keyboard-response",
-            stimulus: "_",
+            stimulus: " ",
             data: {
                 data_type: 'info',
                 ans: 'NA'
@@ -337,11 +337,26 @@
                 data.timestamp = d.toString();
             }
         }
+    
+        // define post-trial pause
+        var post_pause = {
+            type: "html-keyboard-response",
+            stimulus: " ",
+            data: {
+                data_type: 'info',
+                ans: 'NA'
+            },
+            trial_duration: 500,
+            on_finish: function(data){
+                d = new Date();
+                data.timestamp = d.toString();
+            }
+        }
         
         var num_trials = 3;
         for (i = 0; i < num_trials; i++){
             // break page every 10 trials
-            if (i % 10 == 9){
+            if (i % 20 == 19){
                 timeline.push(break_page);
             }
             
@@ -384,6 +399,9 @@
                 }
             }
             timeline.push(audiostim2);
+            
+            // pause 0.5 seconds before next trial
+            timeline.push(post_pause);
             
             // participant gives rating
             var rating = {
