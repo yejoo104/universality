@@ -67,10 +67,21 @@
         }
     
         function saveData(name, data){
+            var form_data = new FormData();
+            form_data.append("data",data);
+            form_data.append("filename",name);
             var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'write_data.php');
-            xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.send(JSON.stringify({filename: name, filedata: data}));
+            xhr.open('POST', 'write_data.php', true); // 'write_data.php' is the path to the php file described above.
+            xhr.onreadystatechange = function (oEvent) {
+              if (xhr.readyState === 4) {
+                  if (xhr.status === 200) {
+                    console.log(xhr.responseText)
+                  } else {
+                    console.log("Error", xhr.statusText);
+                  }
+              }
+            };
+            xhr.send(form_data);
         }
         
         // Initialize
@@ -353,7 +364,7 @@
             }
         }
         
-        var num_trials = 3;
+        var num_trials = 168;
         for (i = 0; i < num_trials; i++){
             // break page every 10 trials
             if (i % 20 == 19){
@@ -400,9 +411,6 @@
             }
             timeline.push(audiostim2);
             
-            // pause 0.5 seconds before next trial
-            timeline.push(post_pause);
-            
             // participant gives rating
             var rating = {
                 type: "html-button-response",
@@ -429,6 +437,9 @@
                 }
             }
             timeline.push(rating);
+            
+            // pause 0.5 seconds before next trial
+            timeline.push(post_pause);
         }
     
         jsPsych.init({

@@ -1,8 +1,12 @@
 <?php
-$post_data = json_decode(file_get_contents('php://input'), true);
-// the directory "data" must be writable by the server
-$name = "data/".$post_data['filename'].".csv";
-$data = $post_data['filedata'];
-// write the file to disk
-file_put_contents($name, $data);
+//if(!empty($_POST['data'])){
+$data = $_POST['data'];
+$fname = str_replace("\'", "" , $_POST['filename']);
+// echo '<script>alert('.$fname.')</script>';
+echo '<script>alert('.$data.')</script>';
+echo '<script>alert2('.$fname.')</script>';
+file_put_contents('data/'.$fname.'.csv',$data);
+//fwrite($fname,$data);
+//fclose($fname)
+//}
 ?>
