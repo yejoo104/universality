@@ -1,0 +1,22 @@
+body {font-size : 10pt; font-family : Arial, sans-serif; margin-left : 15px; margin-right : 0px}
+p {
+	font-size : 10pt;
+	font-family : Arial, sans-serif;
+	text-align:center
+}
+li {font-size : 10pt; font-family : Arial, sans-serif}
+a {font-size : 10pt; font-family : Arial, sans-serif}
+.title {font-size : 12pt; font-family : Arial, sans-serif; font-weight : bold}
+.reg {font-size : 10pt; font-family : Arial, sans-serif}
+.smaller {font-size : 9pt; font-family : Arial, sans-serif}
+.copy {font-size : 8pt; font-family : Arial, sans-serif; color : #000000}
+a:hover {color : #000099}
+#lbR {
+	text-align: center;
+}
+#rightjust {
+	text-align: right;
+}
+#centerjust {
+	text-align: center;
+}
