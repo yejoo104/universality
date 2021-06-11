@@ -32,3 +32,4 @@ if __name__ == "__main__":
     stimsjs()
     stimsjsfolders("stims_normalized.js", "normalized")
     stimsjsfolders("stims_lp400.js", "lp400")
+    stimsjsfolders("stims_lp300.js", "lp300")

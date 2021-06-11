@@ -26,4 +26,5 @@ def save_excel2filenames(filename, folder):
 if __name__ == "__main__":
     save_excel2filenames("filenames_normalized.js", "normalized")
     save_excel2filenames("filenames_lp400.js", "lp400")
+    save_excel2filenames("filenames_lp300.js", "lp300")
     

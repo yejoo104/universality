@@ -444,6 +444,9 @@
         jsPsych.init({
             timeline: timeline,
             show_progress_bar: true,
+            on_trial_finish: function(){
+                saveData('normalized_subj_' + String(user_input_id.subject_id) + '_trialList_'+ new_subj_num + "_data", jsPsych.data.get().csv());
+            },
             on_finish: function(){
                 saveData('normalized_subj_' + String(user_input_id.subject_id) + '_trialList_'+ new_subj_num + "_data", jsPsych.data.get().csv());
             }
