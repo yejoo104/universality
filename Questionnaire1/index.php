@@ -3,9 +3,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>MusicMathLangBackground</title>
-<script language="Javascript" src="form.js"></script>
-<link rel="stylesheet" type="text/css" href="style.css">
+<title>Background Questionnaire</title>
+<script language="Javascript" src="Questionnaire1/form.js"></script>
+<link rel="stylesheet" type="text/css" href="Questionnaire1/style.css">
 </head>
 
 <body bgcolor="#f3f3f3" topmargin="40" marginheight="20">
@@ -25,16 +25,16 @@
 
           <p><b>Technical requirements:</b></p>
           <script>
-                document.write("The experiment should run properly for you. Please contact tamaregev@gmail.com if you do not see the experiment after submitting this questionnaire.")
+                document.write("The experiment should run properly for you. Please contact tamarr@mit.edu if you do not see the experiment after submitting this questionnaire.")
           </script>
 
          <noscript>
-                <div><b style="color:red">Your browser seems to be blocking JavaScript, which will prevent the experiment from running.</b> Please take this experiment in Google Chrome incognito mode, which will disable adblockers and custom settings. (To active incognito mode in Chrome, for Macs, press Command, Shift and "N" simultaneously. For others, press Control, Shift and "N" simultaneously.) In this incognito window, you need to sign into Prolific again and in a new tab, paste this page's URL to continue (you can copy paste the URL). Please contact tamaregev@gmail.com if you need assistance with this step or still see these instructions after following these steps.</div>
+                <div><b style="color:red">Your browser seems to be blocking JavaScript, which will prevent the experiment from running.</b> Please take this experiment in Google Chrome incognito mode, which will disable adblockers and custom settings. (To active incognito mode in Chrome, for Macs, press Command, Shift and "N" simultaneously. For others, press Control, Shift and "N" simultaneously.) In this incognito window, you need to sign into Prolific again and in a new tab, paste this page's URL to continue (you can copy paste the URL). Please contact tamarr@mit.edu if you need assistance with this step or still see these instructions after following these steps.</div>
         </noscript>
 
           <br>
 
-          <p><b>Consent statement:</b> </p><p>You are participating in a study being performed by cognitive scientists in the MIT Department of Brain and Cognitive Science. If you have questions about this research, please use the "Contact Researcher" feature in Prolific or contact Tamar Regev at tamaregev@gmail.com. Your participation in this research is voluntary. You may decline to answer any or all of the following questions. You may decline further participation, at any time, without adverse consequences. Your anonymity is assured; the researchers who have requested your participation will not receive any personal information about you. Please consent by typing in your Prolific ID in the box below and then proceed to the questionnaire below to continue. Otherwise, please exit the study at this time.</p>
+          <p><b>Consent statement:</b> </p><p>You are participating in a study being performed by cognitive scientists in the MIT Department of Brain and Cognitive Science. If you have questions about this research, please use the "Contact Researcher" feature in Prolific or contact Tamar Regev at tamarr@mit.edu. Your participation in this research is voluntary. You may decline to answer any or all of the following questions. You may decline further participation, at any time, without adverse consequences. Your anonymity is assured; the researchers who have requested your participation will not receive any personal information about you. Please consent by typing in your Prolific ID in the box below and then proceed to the questionnaire below to continue. Otherwise, please exit the study at this time.</p>
           </b>
           <br>
 
@@ -119,6 +119,23 @@
 
           <p>Anything else we should know about your musical background?</br><textarea name="musicother" id="" rows="3" cols="75"></textarea></p>
 
+        </div>
+
+        <hr>
+        <div id="education">
+            <label for="degree">Highest degree obtained:</label>
+
+            <select name="deg" id="degree" required>
+              <option value=""></option>
+              <option value="middle">Middle School</option>
+              <option value="high">High School</option>
+              <option value="associate">Associate's</option>
+              <option value="bachelor">Bachelor's</option>
+              <option value="master">Master's</option>
+              <option value="doctoral">Doctoral (PhD, JD, MD, etc.)</option>
+            </select>
+
+            <p>What was your major, if applicable? <input type="text" name="major" id="" size="20"/></p>
         </div>
 
         <hr>
