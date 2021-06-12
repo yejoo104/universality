@@ -449,6 +449,7 @@
             },
             on_finish: function(){
                 saveData('normalized_subj_' + String(user_input_id.subject_id) + '_trialList_'+ new_subj_num + "_data", jsPsych.data.get().csv());
+                location.replace("https://app.prolific.co/submissions/complete?cc=82BBA6AC");
             }
         })
     </script>
