@@ -13,7 +13,7 @@
 <div align="center"><br>
   <br>
   <p class="title"><strong>SIMILARITY OF LANGUAGES 1:  CONSENT  AND  QUESTIONNAIRE</strong></p>
-        <FORM METHOD="post" ACTION="/Questionnaire1/done.php">
+        <FORM METHOD="post" ACTION="/MTurk/Pros/univ/trial/Questionnaire1/done.php">
 
           <div class="disclaimer">This study is being conducted by researchers at the Massachusetts Institute of Technology.</div>
           <br>
