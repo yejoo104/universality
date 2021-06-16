@@ -316,6 +316,23 @@
         }
         timeline.push(practice_rating);
         
+        // Practice Trial 1 Answer
+        var practice_answer_1 = {
+            type: "html-keyboard-response",
+            stimulus: `
+                <p>In the previous trial, both recordings were German, so it was the same language.</p>
+                <p>So the closer you were to 7 (same language), the more accurate you were. </p>
+                <p>Press any key to continue. </p>`,
+            data: {
+                data_type: 'info'
+            },
+            on_finish: function(data){
+                d = new Date();
+                data.timestamp = d.toString();
+            }
+        }
+        timeline.push(practice_answer_1);
+        
         // Practice Trial 2
         var instructions_practice_trial_2 = {
             type: "html-keyboard-response",
@@ -373,6 +390,23 @@
         
         // Rating
         timeline.push(practice_rating);
+        
+        // Practice Trial 2 Answer
+        var practice_answer_2 = {
+            type: "html-keyboard-response",
+            stimulus: `
+                <p>In the previous trial, the first recording was Dutch and the second recording was Japanese, so it was a different language.</p>
+                <p>So the closer you were to 1 (different language), the more accurate you were. </p>
+                <p>Press any key to continue. </p>`,
+            data: {
+                data_type: 'info'
+            },
+            on_finish: function(data){
+                d = new Date();
+                data.timestamp = d.toString();
+            }
+        }
+        timeline.push(practice_answer_2);
         
         // Instructions Before Actual Experiment
         var instructions_actual_trial = {
