@@ -178,7 +178,7 @@
         var volume_adjust = {
             type: 'audio-keyboard-response',
             prompt: '<p> Adjust your headphone volume using this recording. </p> <p> Press any key to continue when you are finished </p>',
-            stimulus: "soundFiles/Italian/normalized/common_voice_it_17437588.wav",
+            stimulus: "soundFiles/Italian/normalized/common_voice_it_17416176.wav",
             data: {
                 data_type: 'info'
             }
@@ -227,11 +227,11 @@
         }
         timeline.push(trial_instructions);
         
-        // Practice Trial
-        var instructions_practice_trial = {
+        // Practice Trial 1
+        var instructions_practice_trial_1 = {
             type: "html-keyboard-response",
             stimulus: `
-                <p>Pratice trial  1/1:</p>
+                <p>Pratice trial  1 / 2: This is the first out of two practice trials.</p>
                 <p>The data from this trial will not be recorded. It's just for you to get familiar with the settings.</p>
                 <p>Press any key to continue</p>
                 `,
@@ -243,10 +243,10 @@
                 data.timestamp = d.toString();
             }
         }
-        timeline.push(instructions_practice_trial);
+        timeline.push(instructions_practice_trial_1);
         
-        // Practice Audio 1
-        var practice_audio_1 = {
+        // Practice Audio 1_1
+        var practice_audio_1_1 = {
             type: 'audio-keyboard-response',
             prompt: "<p> This is the first recording. </p>",
             stimulus: "soundFiles/German/normalized/common_voice_de_17828493.wav",
@@ -260,7 +260,7 @@
                 data.timestamp = d.toString();
             }
         }
-        timeline.push(practice_audio_1);
+        timeline.push(practice_audio_1_1);
         
         // Practice Pause
         var pause_practice = {
@@ -278,8 +278,8 @@
         }
         timeline.push(pause_practice);
         
-        // Practice Audio 2
-        var practice_audio_2 = {
+        // Practice Audio 1_2
+        var practice_audio_1_2 = {
             type: 'audio-keyboard-response',
             prompt: "<p> This is the second recording. </p>",
             stimulus: "soundFiles/German/normalized/common_voice_de_17938156.wav",
@@ -293,7 +293,7 @@
                 data.timestamp = d.toString();
             }
         }
-        timeline.push(practice_audio_2);
+        timeline.push(practice_audio_1_2);
         
         // Practice Rating
         var practice_rating = {
@@ -314,6 +314,64 @@
                 data.timestamp = d.toString();
             }
         }
+        timeline.push(practice_rating);
+        
+        // Practice Trial 2
+        var instructions_practice_trial_2 = {
+            type: "html-keyboard-response",
+            stimulus: `
+                <p>Pratice trial 2 / 2: This is the second out of two practice trials.</p>
+                <p>The data from this trial will not be recorded. It's just for you to get familiar with the settings.</p>
+                <p>Press any key to continue</p>
+                `,
+            data: {
+                data_type: 'info'
+            },
+            on_finish: function(data) {
+                d = new Date();
+                data.timestamp = d.toString();
+            }
+        }
+        timeline.push(instructions_practice_trial_2);
+        
+        // Practice Audio 2_1
+        var practice_audio_2_1 = {
+            type: 'audio-keyboard-response',
+            prompt: "<p> This is the first recording. </p>",
+            stimulus: "soundFiles/Italian/normalized/common_voice_it_17437588.wav",
+            choices: jsPsych.NO_KEYS,
+            trial_ends_after_audio: true,
+            data: {
+                data_type: 'stimulus',
+            },
+            on_finish: function(data){
+                d = new Date();
+                data.timestamp = d.toString();
+            }
+        }
+        timeline.push(practice_audio_2_1);
+        
+        // Pause
+        timeline.push(pause_practice);
+        
+        // Practice Audio 2_2
+        var practice_audio_2_2 = {
+            type: 'audio-keyboard-response',
+            prompt: "<p> This is the second recording. </p>",
+            stimulus: "soundFiles/Japanese/normalized/common_voice_ja_22451955.wav",
+            choices: jsPsych.NO_KEYS,
+            trial_ends_after_audio: true,
+            data: {
+                data_type: 'stimulus',
+            },
+            on_finish: function(data){
+                d = new Date();
+                data.timestamp = d.toString();
+            }
+        }
+        timeline.push(practice_audio_2_2);
+        
+        // Rating
         timeline.push(practice_rating);
         
         // Instructions Before Actual Experiment
