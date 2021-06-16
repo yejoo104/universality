@@ -185,6 +185,24 @@
         };
         timeline.push(volume_adjust);
         
+        // sentence completion
+        var sentence_completion = {
+            type: 'survey-text',
+            questions: [{prompt: "Complete the following sentences in a way that makes sense.<br/><br/>My house is _______.", required: true},
+                        {prompt: "When I was _______.", required: true},
+                        {prompt: "It's raining tomorrow, so _______.", required: true},
+                        {prompt: "I could have never imagined that _______.", required: true}],
+            data: {
+                data_type: 'filter'
+            },
+            button_label: "Press 'enter' to continue",
+            on_finish: function(data) {
+                d = new Date();
+                data.timestamp = d.toString();
+            }
+        }
+        timeline.push(sentence_completion);
+        
         // more trial instructions
         var trial_instructions = {
             type: "html-keyboard-response",
