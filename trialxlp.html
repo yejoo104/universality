@@ -225,7 +225,6 @@
                 data.timestamp = d.toString();
             }
         }
-        timeline.push(trial_instructions);
         
         // Practice Trial 1
         var instructions_practice_trial_1 = {
@@ -243,7 +242,6 @@
                 data.timestamp = d.toString();
             }
         }
-        timeline.push(instructions_practice_trial_1);
         
         // Practice Audio 1_1
         var practice_audio_1_1 = {
@@ -260,7 +258,6 @@
                 data.timestamp = d.toString();
             }
         }
-        timeline.push(practice_audio_1_1);
         
         // Practice Pause
         var pause_practice = {
@@ -276,7 +273,6 @@
                 data.timestamp = d.toString();
             }
         }
-        timeline.push(pause_practice);
         
         // Practice Audio 1_2
         var practice_audio_1_2 = {
@@ -293,7 +289,6 @@
                 data.timestamp = d.toString();
             }
         }
-        timeline.push(practice_audio_1_2);
         
         // Practice Rating
         var practice_rating = {
@@ -314,8 +309,7 @@
                 data.timestamp = d.toString();
             }
         }
-        timeline.push(practice_rating);
-        
+
         // Practice Trial 1 Answer
         var practice_answer_1 = {
             type: "html-keyboard-response",
@@ -331,7 +325,6 @@
                 data.timestamp = d.toString();
             }
         }
-        timeline.push(practice_answer_1);
         
         // Practice Trial 2
         var instructions_practice_trial_2 = {
@@ -349,7 +342,6 @@
                 data.timestamp = d.toString();
             }
         }
-        timeline.push(instructions_practice_trial_2);
         
         // Practice Audio 2_1
         var practice_audio_2_1 = {
@@ -366,10 +358,6 @@
                 data.timestamp = d.toString();
             }
         }
-        timeline.push(practice_audio_2_1);
-        
-        // Pause
-        timeline.push(pause_practice);
         
         // Practice Audio 2_2
         var practice_audio_2_2 = {
@@ -386,10 +374,6 @@
                 data.timestamp = d.toString();
             }
         }
-        timeline.push(practice_audio_2_2);
-        
-        // Rating
-        timeline.push(practice_rating);
         
         // Practice Trial 2 Answer
         var practice_answer_2 = {
@@ -406,7 +390,37 @@
                 data.timestamp = d.toString();
             }
         }
-        timeline.push(practice_answer_2);
+        
+        // Check if ready
+        var ready = {
+            type: "html-keyboard-response",
+            stimulus: `
+                <p>The practice trials have concluded. </p>
+                <p>In the actual trials, you will not be told the correct answers. </p>
+                `,
+            prompt: "Press 'e' if you are ready to begin the experiment. Press 'i' in order to view the instructions and the practice trial once again.",
+            choices: ['e', 'i'],
+            data: {
+                data_type: 'none'
+            },
+            on_finish: function (data) {
+                d = new Date();
+                data.timestamp = d.toString();
+            }
+        }
+        
+        // Loop of instructions ~ practice trial
+        var loop_node = {
+            timeline: [trial_instructions, instructions_practice_trial_1, practice_audio_1_1, pause_practice, practice_audio_1_2, practice_rating, practice_answer_1, instructions_practice_trial_2, practice_audio_2_1, pause_practice, practice_audio_2_2, practice_rating, practice_answer_2, ready],
+            loop_function: function(data){
+                if(jsPsych.pluginAPI.compareKeys(data.values()[data.values().length - 1].response, 'i')) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+        timeline.push(loop_node);
         
         // Instructions Before Actual Experiment
         var instructions_actual_trial = {
