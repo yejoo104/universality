@@ -314,7 +314,7 @@
         var practice_answer_1 = {
             type: "html-keyboard-response",
             stimulus: `
-                <p>In the previous trial, both recordings were German, so it was the same language.</p>
+                <p>In this trial, both recordings were German, so it was the same language.</p>
                 <p>So the closer you were to 7 (same language), the more accurate you were. </p>
                 <p>Press any key to continue. </p>`,
             data: {
@@ -379,7 +379,7 @@
         var practice_answer_2 = {
             type: "html-keyboard-response",
             stimulus: `
-                <p>In the previous trial, the first recording was Dutch and the second recording was Japanese, so it was a different language.</p>
+                <p>In this trial, the first recording was Italian and the second recording was Japanese, so it was a different language.</p>
                 <p>So the closer you were to 1 (different language), the more accurate you were. </p>
                 <p>Press any key to continue. </p>`,
             data: {
@@ -487,7 +487,7 @@
             }
         }
         
-        var num_trials = 1;
+        var num_trials = 168;
         for (i = 0; i < num_trials; i++){
             // break page every 10 trials
             if (i % 20 == 19){

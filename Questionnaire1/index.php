@@ -20,7 +20,7 @@
 
           <div class="warning"> <b style="color:red"> Please only complete this study "Similarity of Languages 1" once </b>. You will not be paid for retakes. If you have already completed this study and submit it again, all submissions but the first will be rejected, and you will only be paid for the first submission. Having a submission rejected is detrimental to your reputation on Prolific, and may prevent you from participating in studies in the future.</div>
 
-          <p>This study should take you around 30 minutes. <b>If you cannot dedicate 30 minutes, please don't do this study. You will not get paid for an incomplete study. </b></p>
+          <p>This study should take you around 50 minutes. <b>If you cannot dedicate 50 minutes, please don't do this study. You will not get paid for an incomplete study. </b></p>
 
 
           <p><b>Technical requirements:</b></p>
